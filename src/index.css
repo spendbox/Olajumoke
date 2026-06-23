@@ -28,11 +28,13 @@ body {
   color: var(--ink);
   overflow: hidden;
   overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
   position: relative;
   overflow: hidden;
+  height: 100dvh;
 }
 
 /* ------- Animated aurora background ------- */
@@ -42,9 +44,9 @@ body {
   z-index: 0;
   overflow: hidden;
   background:
-    radial-gradient(1200px 800px at 10% 10%, rgba(167, 139, 250, 0.25), transparent 60%),
-    radial-gradient(1000px 700px at 90% 20%, rgba(255, 126, 179, 0.22), transparent 60%),
-    radial-gradient(1100px 900px at 50% 100%, rgba(94, 231, 223, 0.18), transparent 60%),
+    radial-gradient(900px 700px at 10% 10%, rgba(167, 139, 250, 0.25), transparent 60%),
+    radial-gradient(800px 600px at 90% 20%, rgba(255, 126, 179, 0.22), transparent 60%),
+    radial-gradient(900px 800px at 50% 100%, rgba(94, 231, 223, 0.18), transparent 60%),
     var(--bg);
 }
 
@@ -52,7 +54,7 @@ body {
   position: absolute;
   border-radius: 50%;
   filter: blur(60px);
-  opacity: 0.55;
+  opacity: 0.5;
   mix-blend-mode: screen;
 }
 
@@ -69,27 +71,27 @@ body {
 .stage {
   position: relative;
   z-index: 2;
-  height: 100%;
+  height: 100dvh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
 }
 
 .panel {
   width: 100%;
-  max-width: 720px;
+  max-width: 560px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 20px;
 }
 
 .eyebrow {
-  font-size: 13px;
-  letter-spacing: 0.32em;
+  font-size: 11px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--violet);
   font-weight: 700;
@@ -98,24 +100,27 @@ body {
 .lead {
   font-family: 'Fraunces', serif;
   font-weight: 600;
-  font-size: clamp(26px, 5.2vw, 46px);
-  line-height: 1.25;
+  font-size: clamp(21px, 5.4vw, 32px);
+  line-height: 1.3;
   margin: 0;
   text-wrap: balance;
 }
 
 .sub {
-  font-size: clamp(15px, 2.4vw, 19px);
+  font-size: clamp(14px, 3.6vw, 16px);
+  font-weight: 400;
   color: var(--muted);
   line-height: 1.6;
   margin: 0;
-  max-width: 560px;
+  max-width: 460px;
 }
 
 .whisper {
   font-family: 'Caveat', cursive;
-  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 700;
+  font-size: clamp(20px, 5.6vw, 26px);
   color: var(--gold);
+  margin: 0;
 }
 
 /* ------- Button ------- */
@@ -125,24 +130,15 @@ body {
   cursor: pointer;
   font-family: inherit;
   font-weight: 700;
-  font-size: clamp(16px, 2.6vw, 20px);
+  font-size: clamp(15px, 4vw, 18px);
   color: #1a0a2e;
-  padding: 16px 38px;
+  padding: 14px 34px;
   border-radius: 999px;
   background: linear-gradient(120deg, var(--pink), var(--violet), var(--cyan));
   background-size: 200% 200%;
-  box-shadow: 0 10px 40px rgba(167, 139, 250, 0.45);
+  box-shadow: 0 10px 36px rgba(167, 139, 250, 0.45);
   overflow: hidden;
   isolation: isolate;
-}
-
-.btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.55), transparent);
-  transform: translateX(-120%);
-  z-index: -1;
 }
 
 .btn-ghost {
@@ -156,15 +152,15 @@ body {
 .names {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   align-items: center;
 }
 
 .name {
   font-family: 'Fraunces', serif;
   font-weight: 900;
-  line-height: 1.02;
-  font-size: clamp(36px, 9vw, 86px);
+  line-height: 1.04;
+  font-size: clamp(32px, 10vw, 64px);
   background: linear-gradient(120deg, var(--pink), var(--gold), var(--cyan), var(--violet));
   background-size: 300% 300%;
   -webkit-background-clip: text;
@@ -175,7 +171,8 @@ body {
 
 .hi {
   font-family: 'Caveat', cursive;
-  font-size: clamp(28px, 6vw, 48px);
+  font-weight: 700;
+  font-size: clamp(26px, 7vw, 40px);
   color: var(--ink);
 }
 
@@ -183,46 +180,56 @@ body {
 .cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 12px;
   width: 100%;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 480px) {
   .cards {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
 
 .card {
   cursor: pointer;
-  border-radius: 22px;
-  padding: 26px 18px;
+  border-radius: 20px;
+  padding: 20px 14px;
   text-align: center;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  overflow: hidden;
   position: relative;
+}
+
+@media (max-width: 480px) {
+  .card {
+    flex-direction: row;
+    justify-content: center;
+    padding: 16px;
+    gap: 12px;
+  }
 }
 
 .card-rating {
   font-family: 'Fraunces', serif;
   font-weight: 900;
-  font-size: clamp(30px, 7vw, 48px);
+  font-size: clamp(26px, 7vw, 40px);
   line-height: 1;
 }
 
 .card-emoji {
-  font-size: 34px;
+  font-size: 28px;
 }
 
 .card-label {
-  font-size: 13px;
-  letter-spacing: 0.18em;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -239,20 +246,148 @@ body {
 
 .chosen-note {
   font-family: 'Caveat', cursive;
-  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 500;
+  font-size: clamp(18px, 5vw, 24px);
   color: var(--gold);
+  margin: 0;
   min-height: 1.4em;
 }
 
-.footer-hint {
-  position: fixed;
-  bottom: 18px;
-  left: 0;
-  right: 0;
+/* ------- Reasons slideshow ------- */
+.reasons {
+  position: relative;
   z-index: 2;
+  width: 100%;
+  max-width: 560px;
+  height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: calc(18px + env(safe-area-inset-top)) 20px calc(18px + env(safe-area-inset-bottom));
+}
+
+.reasons-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.tone-badge {
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: 18px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  color: #1a0a2e;
+  background: linear-gradient(120deg, var(--pink), var(--gold));
+}
+
+.counter {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+
+.counter-dim {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.progress {
+  height: 5px;
+  width: 100%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--pink), var(--violet), var(--cyan));
+}
+
+.reasons-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.reason-card {
   text-align: center;
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(201, 185, 232, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.reason-emoji {
+  font-size: clamp(48px, 14vw, 72px);
+  line-height: 1;
+}
+
+.reason-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: clamp(24px, 6.4vw, 38px);
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.01em;
+  background: linear-gradient(120deg, var(--pink), var(--gold), var(--cyan));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-wrap: balance;
+}
+
+.reason-body {
+  font-weight: 400;
+  font-size: clamp(15px, 4.2vw, 19px);
+  line-height: 1.65;
+  color: var(--ink);
+  margin: 0;
+  max-width: 460px;
+  text-wrap: pretty;
+}
+
+.reasons-nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.nav-btn {
+  flex: 1;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 14px 18px;
+  border-radius: 999px;
+  border: none;
+  transition: transform 0.15s ease;
+}
+
+.nav-btn:active {
+  transform: scale(0.96);
+}
+
+.nav-ghost {
+  flex: 0 0 38%;
+  background: transparent;
+  color: var(--muted);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+}
+
+.nav-primary {
+  color: #1a0a2e;
+  background: linear-gradient(120deg, var(--pink), var(--violet), var(--cyan));
+  background-size: 200% 200%;
+  box-shadow: 0 8px 28px rgba(167, 139, 250, 0.4);
 }

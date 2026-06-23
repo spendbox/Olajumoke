@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import Aurora from './Aurora.jsx'
 import Button from './Button.jsx'
+import Reasons from './Reasons.jsx'
 
 const FULL_NAME = ['Aromashodu', 'Olajumoke', 'Faderera']
 
@@ -114,21 +115,18 @@ function NameReveal({ next }) {
 
 /* ---------- Slide 3: Choose a rating ---------- */
 const RATINGS = [
-  { key: 'g', code: 'G', emoji: '🌸', label: 'sweet & wholesome', note: 'aww, playing it cute 🥹' },
-  { key: 'pg', code: 'PG-13', emoji: '😏', label: 'a little spicy', note: 'ooh, living dangerously 😌' },
-  { key: 'x', code: '18+', emoji: '🔥', label: 'no holding back', note: 'bold choice… buckle up 😈' },
+  { key: 'g', code: 'G', emoji: '🌸', label: 'sweet & wholesome' },
+  { key: 'pg', code: 'PG-13', emoji: '😏', label: 'a little spicy' },
+  { key: 'x', code: '18+', emoji: '🔥', label: 'no holding back' },
 ]
 
-function Choose() {
-  const [picked, setPicked] = useState(null)
-
+function Choose({ onPick }) {
   return (
     <motion.div className="panel" {...fade}>
       <div className="eyebrow">the real reason i built this</div>
       <p className="lead">
         I wanted to tell you how amazing you are… but words couldn&apos;t do it.
-        <br />
-        so I did the next best thing — I built you an app.
+        So I did the next best thing — I built you an app.
       </p>
       <p className="sub">
         First, choose how you&apos;d like me to express my thoughts about you:
@@ -142,11 +140,11 @@ function Choose() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 + i * 0.12, type: 'spring', stiffness: 160, damping: 18 }}
-            whileHover={{ scale: 1.05, y: -6, borderColor: 'rgba(255,255,255,0.4)' }}
+            whileHover={{ scale: 1.04, y: -6, borderColor: 'rgba(255,255,255,0.4)' }}
             whileTap={{ scale: 0.97 }}
             onClick={() => {
-              setPicked(r)
               burst()
+              setTimeout(() => onPick(r.key), 250)
             }}
           >
             <span className="card-emoji">{r.emoji}</span>
@@ -156,30 +154,31 @@ function Choose() {
         ))}
       </div>
 
-      <AnimatePresence mode="wait">
-        <motion.p
-          key={picked ? picked.key : 'empty'}
-          className="chosen-note"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-        >
-          {picked ? picked.note : 'pick one to begin ✨'}
-        </motion.p>
-      </AnimatePresence>
+      <p className="chosen-note">pick one to begin ✨</p>
     </motion.div>
   )
 }
 
 export default function App() {
   const [slide, setSlide] = useState(0)
+  const [tone, setTone] = useState(null)
   const next = () => setSlide((s) => s + 1)
+
+  const pick = (t) => {
+    setTone(t)
+    setSlide(4)
+  }
+  const restart = () => {
+    setTone(null)
+    setSlide(3)
+  }
 
   const slides = [
     <Intro key="intro" next={next} />,
     <PromiseAgain key="promise" next={next} />,
     <NameReveal key="name" next={next} />,
-    <Choose key="choose" />,
+    <Choose key="choose" onPick={pick} />,
+    <Reasons key="reasons" tone={tone} onRestart={restart} />,
   ]
 
   return (
@@ -188,7 +187,6 @@ export default function App() {
       <div className="stage">
         <AnimatePresence mode="wait">{slides[slide]}</AnimatePresence>
       </div>
-      <div className="footer-hint">made with way too much love · for your eyes only</div>
     </>
   )
 }

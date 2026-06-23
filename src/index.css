@@ -1,0 +1,258 @@
+:root {
+  --bg: #0b0118;
+  --ink: #f7f2ff;
+  --muted: #c9b9e8;
+  --pink: #ff7eb3;
+  --violet: #a78bfa;
+  --cyan: #5ee7df;
+  --gold: #ffd36e;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+#root {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ------- Animated aurora background ------- */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 800px at 10% 10%, rgba(167, 139, 250, 0.25), transparent 60%),
+    radial-gradient(1000px 700px at 90% 20%, rgba(255, 126, 179, 0.22), transparent 60%),
+    radial-gradient(1100px 900px at 50% 100%, rgba(94, 231, 223, 0.18), transparent 60%),
+    var(--bg);
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  mix-blend-mode: screen;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ------- Layout ------- */
+.stage {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.panel {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--violet);
+  font-weight: 700;
+}
+
+.lead {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(26px, 5.2vw, 46px);
+  line-height: 1.25;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.sub {
+  font-size: clamp(15px, 2.4vw, 19px);
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 560px;
+}
+
+.whisper {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(22px, 4vw, 30px);
+  color: var(--gold);
+}
+
+/* ------- Button ------- */
+.btn {
+  position: relative;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: clamp(16px, 2.6vw, 20px);
+  color: #1a0a2e;
+  padding: 16px 38px;
+  border-radius: 999px;
+  background: linear-gradient(120deg, var(--pink), var(--violet), var(--cyan));
+  background-size: 200% 200%;
+  box-shadow: 0 10px 40px rgba(167, 139, 250, 0.45);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(-120%);
+  z-index: -1;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  box-shadow: none;
+}
+
+/* ------- Name reveal ------- */
+.names {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.name {
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  line-height: 1.02;
+  font-size: clamp(36px, 9vw, 86px);
+  background: linear-gradient(120deg, var(--pink), var(--gold), var(--cyan), var(--violet));
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.hi {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(28px, 6vw, 48px);
+  color: var(--ink);
+}
+
+/* ------- Choice cards ------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+@media (max-width: 560px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  cursor: pointer;
+  border-radius: 22px;
+  padding: 26px 18px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-rating {
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: clamp(30px, 7vw, 48px);
+  line-height: 1;
+}
+
+.card-emoji {
+  font-size: 34px;
+}
+
+.card-label {
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card-g .card-rating {
+  color: var(--cyan);
+}
+.card-pg .card-rating {
+  color: var(--gold);
+}
+.card-x .card-rating {
+  color: var(--pink);
+}
+
+.chosen-note {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(20px, 4vw, 28px);
+  color: var(--gold);
+  min-height: 1.4em;
+}
+
+.footer-hint {
+  position: fixed;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(201, 185, 232, 0.5);
+}

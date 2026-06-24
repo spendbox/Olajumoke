@@ -6,7 +6,10 @@
   --violet: #a78bfa;
   --cyan: #5ee7df;
   --gold: #ffd36e;
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  --display: 'Syne', system-ui, sans-serif;
+  --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --script: 'Dancing Script', cursive;
+  font-family: var(--body);
 }
 
 * {
@@ -98,7 +101,7 @@ body {
 }
 
 .lead {
-  font-family: 'Fraunces', serif;
+  font-family: var(--display);
   font-weight: 600;
   font-size: clamp(21px, 5.4vw, 32px);
   line-height: 1.3;
@@ -116,7 +119,7 @@ body {
 }
 
 .whisper {
-  font-family: 'Caveat', cursive;
+  font-family: var(--script);
   font-weight: 700;
   font-size: clamp(20px, 5.6vw, 26px);
   color: var(--gold);
@@ -157,8 +160,8 @@ body {
 }
 
 .name {
-  font-family: 'Fraunces', serif;
-  font-weight: 900;
+  font-family: var(--display);
+  font-weight: 800;
   line-height: 1.04;
   font-size: clamp(32px, 10vw, 64px);
   background: linear-gradient(120deg, var(--pink), var(--gold), var(--cyan), var(--violet));
@@ -170,7 +173,7 @@ body {
 }
 
 .hi {
-  font-family: 'Caveat', cursive;
+  font-family: var(--script);
   font-weight: 700;
   font-size: clamp(26px, 7vw, 40px);
   color: var(--ink);
@@ -216,8 +219,8 @@ body {
 }
 
 .card-rating {
-  font-family: 'Fraunces', serif;
-  font-weight: 900;
+  font-family: var(--display);
+  font-weight: 800;
   font-size: clamp(26px, 7vw, 40px);
   line-height: 1;
 }
@@ -245,7 +248,7 @@ body {
 }
 
 .chosen-note {
-  font-family: 'Caveat', cursive;
+  font-family: var(--script);
   font-weight: 500;
   font-size: clamp(18px, 5vw, 24px);
   color: var(--gold);
@@ -274,8 +277,8 @@ body {
 }
 
 .tone-badge {
-  font-family: 'Fraunces', serif;
-  font-weight: 900;
+  font-family: var(--display);
+  font-weight: 800;
   font-size: 18px;
   padding: 4px 14px;
   border-radius: 999px;
@@ -326,14 +329,45 @@ body {
   gap: 18px;
 }
 
-.reason-emoji {
-  font-size: clamp(48px, 14vw, 72px);
+/* ------- Glowing emoji ------- */
+.emoji-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(96px, 26vw, 132px);
+  height: clamp(96px, 26vw, 132px);
+}
+
+.emoji-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--pink),
+    var(--violet),
+    var(--cyan),
+    var(--gold),
+    var(--pink)
+  );
+  filter: blur(14px);
+  opacity: 0.55;
+  -webkit-mask: radial-gradient(closest-side, transparent 58%, #000 62%, #000 100%);
+  mask: radial-gradient(closest-side, transparent 58%, #000 62%, #000 100%);
+}
+
+.emoji-glyph {
+  position: relative;
+  font-size: clamp(52px, 15vw, 78px);
   line-height: 1;
+  filter: drop-shadow(0 6px 18px rgba(255, 126, 179, 0.45))
+    drop-shadow(0 2px 6px rgba(167, 139, 250, 0.5));
 }
 
 .reason-title {
-  font-family: 'Fraunces', serif;
-  font-weight: 900;
+  font-family: var(--display);
+  font-weight: 800;
   font-size: clamp(24px, 6.4vw, 38px);
   line-height: 1.15;
   margin: 0;
@@ -390,4 +424,27 @@ body {
   background: linear-gradient(120deg, var(--pink), var(--violet), var(--cyan));
   background-size: 200% 200%;
   box-shadow: 0 8px 28px rgba(167, 139, 250, 0.4);
+}
+
+
+/* ------- Floating ambient glyphs ------- */
+.floaters {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floaters span {
+  position: absolute;
+  top: 0;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floaters {
+    display: none;
+  }
 }

@@ -1,7 +1,44 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import { reasons, toneMeta } from './content.js'
+
+// Shuffle the nine traits (indices 0..8); keep the "10%" and fiancé beats last.
+function buildOrder() {
+  const traits = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  for (let i = traits.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[traits[i], traits[j]] = [traits[j], traits[i]]
+  }
+  return [...traits, 9, 10]
+}
+
+// Emoji with a glowing halo + slow rotating gradient ring + gentle float.
+function GlowEmoji({ children, spin = true }) {
+  return (
+    <div className="emoji-wrap">
+      {spin && (
+        <motion.span
+          className="emoji-ring"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
+        />
+      )}
+      <motion.span
+        className="emoji-glyph"
+        initial={{ scale: 0, rotate: -25 }}
+        animate={{ scale: 1, rotate: 0, y: [0, -8, 0] }}
+        transition={{
+          scale: { type: 'spring', stiffness: 220, damping: 12, delay: 0.08 },
+          rotate: { type: 'spring', stiffness: 220, damping: 12, delay: 0.08 },
+          y: { duration: 3.2, repeat: Infinity, ease: 'easeInOut' },
+        }}
+      >
+        {children}
+      </motion.span>
+    </div>
+  )
+}
 
 const variants = {
   enter: (dir) => ({ opacity: 0, x: dir > 0 ? 80 : -80, scale: 0.96, filter: 'blur(6px)' }),
@@ -19,10 +56,12 @@ function burst() {
 }
 
 export default function Reasons({ tone, onRestart }) {
+  const order = useMemo(buildOrder, [])
   const [[i, dir], setStep] = useState([0, 1])
-  const total = reasons.length
+  const total = order.length
   const done = i >= total
   const meta = toneMeta[tone]
+  const r = done ? null : reasons[order[i]]
 
   const go = (d) => {
     setStep(([cur]) => {
@@ -71,16 +110,9 @@ export default function Reasons({ tone, onRestart }) {
               exit="exit"
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             >
-              <motion.div
-                className="reason-emoji"
-                initial={{ scale: 0, rotate: -25 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 220, damping: 12, delay: 0.1 }}
-              >
-                {reasons[i].emoji}
-              </motion.div>
-              <h2 className="reason-title">{reasons[i].title}</h2>
-              <p className="reason-body">{reasons[i][tone]}</p>
+              <GlowEmoji>{r.emoji}</GlowEmoji>
+              <h2 className="reason-title">{r.title}</h2>
+              <p className="reason-body">{r[tone]}</p>
             </motion.div>
           ) : (
             <motion.div
@@ -93,17 +125,10 @@ export default function Reasons({ tone, onRestart }) {
               exit="exit"
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             >
-              <motion.div
-                className="reason-emoji"
-                animate={{ rotate: [0, 12, -12, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                💌
-              </motion.div>
-              <h2 className="reason-title">…and that&apos;s only the 10%.</h2>
+              <GlowEmoji spin={false}>💌</GlowEmoji>
+              <h2 className="reason-title">that&apos;s the 10%.</h2>
               <p className="reason-body">
-                There&apos;s so much more where that came from. Happy you exist,
-                Olajumoke. ✨
+                The rest of you is even better. Glad you exist, Olajumoke. ✨
               </p>
             </motion.div>
           )}

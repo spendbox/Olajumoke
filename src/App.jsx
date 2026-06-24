@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti'
 import Aurora from './Aurora.jsx'
 import Button from './Button.jsx'
 import Reasons from './Reasons.jsx'
+import FloatingHearts from './FloatingHearts.jsx'
 
 const FULL_NAME = ['Aromashodu', 'Olajumoke', 'Faderera']
 
@@ -27,7 +28,6 @@ function burst() {
 function Intro({ next }) {
   return (
     <motion.div className="panel" {...fade}>
-      <div className="eyebrow">a tiny secret</div>
       <p className="lead">
         This is probably the most random, nerdy gift you would ever get…
         <br />
@@ -123,7 +123,6 @@ const RATINGS = [
 function Choose({ onPick }) {
   return (
     <motion.div className="panel" {...fade}>
-      <div className="eyebrow">the real reason i built this</div>
       <p className="lead">
         I wanted to tell you how amazing you are… but words couldn&apos;t do it.
         So I did the next best thing — I built you an app.
@@ -184,6 +183,7 @@ export default function App() {
   return (
     <>
       <Aurora />
+      <FloatingHearts />
       <div className="stage">
         <AnimatePresence mode="wait">{slides[slide]}</AnimatePresence>
       </div>

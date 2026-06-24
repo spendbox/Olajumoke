@@ -664,3 +664,31 @@ body {
   color: var(--muted);
   margin: 0;
 }
+
+/* ------- Scratch progress meter ------- */
+.scratch-meter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: min(78vw, 280px);
+}
+.scratch-meter-bar {
+  width: 100%;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+.scratch-meter-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--pink), var(--violet), var(--cyan));
+  transition: width 0.12s ease-out;
+}
+.scratch-meter-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}

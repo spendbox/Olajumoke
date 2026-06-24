@@ -16,6 +16,7 @@ export default function ScratchReveal({ next }) {
   const finished = useRef(false)
   const [revealed, setRevealed] = useState(false)
   const [imgOk, setImgOk] = useState(true)
+  const [pct, setPct] = useState(0)
 
   // paint the scratch coating
   useEffect(() => {
@@ -67,6 +68,7 @@ export default function ScratchReveal({ next }) {
     if (finished.current) return
     finished.current = true
     setRevealed(true)
+    setPct(100)
     buzz(30)
     confetti({
       particleCount: 90,
@@ -94,7 +96,9 @@ export default function ScratchReveal({ next }) {
     ctx.beginPath()
     ctx.arc(x, y, Math.max(22, c.clientWidth * 0.09), 0, Math.PI * 2)
     ctx.fill()
-    if (scratchedPct() > 0.55) finish()
+    const cleared = scratchedPct()
+    setPct(Math.min(100, Math.round((cleared / 0.55) * 100)))
+    if (cleared > 0.55) finish()
   }
 
   const start = (e) => {
@@ -159,6 +163,19 @@ export default function ScratchReveal({ next }) {
           )}
         </AnimatePresence>
       </div>
+
+      {imgOk && !revealed && (
+        <div className="scratch-meter" aria-live="polite">
+          <div className="scratch-meter-bar">
+            <div className="scratch-meter-fill" style={{ width: `${pct}%` }} />
+          </div>
+          <span className="scratch-meter-label">
+            {pct < 100
+              ? `${pct}% — keep scratching to reveal`
+              : 'almost there…'}
+          </span>
+        </div>
+      )}
 
       <AnimatePresence>
         {revealed && (

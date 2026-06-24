@@ -5,6 +5,7 @@ import Aurora from './Aurora.jsx'
 import Button from './Button.jsx'
 import Reasons from './Reasons.jsx'
 import FloatingHearts from './FloatingHearts.jsx'
+import MusicToggle from './MusicToggle.jsx'
 
 const FULL_NAME = ['Aromashodu', 'Olajumoke', 'Faderera']
 
@@ -184,6 +185,7 @@ export default function App() {
     <>
       <Aurora />
       <FloatingHearts />
+      <MusicToggle />
       <div className="stage">
         <AnimatePresence mode="wait">{slides[slide]}</AnimatePresence>
       </div>

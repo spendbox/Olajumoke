@@ -164,9 +164,7 @@ export default function Reasons({ tone, onRestart }) {
             >
               <GlowEmoji spin={false}>💌</GlowEmoji>
               <h2 className="reason-title">that&apos;s the 3.14%.</h2>
-              <p className="reason-body">
-                The rest of you is even better. Glad you exist, Olajumoke. ✨
-              </p>
+              <p className="reason-body">I am sure the rest of you is even better ❤️</p>
             </motion.div>
           )}
         </AnimatePresence>

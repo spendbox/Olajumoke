@@ -6,6 +6,7 @@ import Button from './Button.jsx'
 import Reasons from './Reasons.jsx'
 import FloatingHearts from './FloatingHearts.jsx'
 import MusicToggle from './MusicToggle.jsx'
+import ScratchReveal from './ScratchReveal.jsx'
 
 const FULL_NAME = ['Aromashodu', 'Olajumoke', 'Faderera']
 
@@ -166,17 +167,18 @@ export default function App() {
 
   const pick = (t) => {
     setTone(t)
-    setSlide(4)
+    setSlide(5)
   }
   const restart = () => {
     setTone(null)
-    setSlide(3)
+    setSlide(4)
   }
 
   const slides = [
     <Intro key="intro" next={next} />,
     <PromiseAgain key="promise" next={next} />,
     <NameReveal key="name" next={next} />,
+    <ScratchReveal key="scratch" next={next} />,
     <Choose key="choose" onPick={pick} />,
     <Reasons key="reasons" tone={tone} onRestart={restart} />,
   ]

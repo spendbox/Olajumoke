@@ -68,10 +68,10 @@ export const reasons = [
   },
   {
     emoji: '🗝️',
-    title: 'And this is only the 10%',
-    g: "And after all of that — this is maybe 10% of you. The other 90% is a beautiful mystery I'd love to keep reading.",
-    pg: "Here's the catch: this is barely 10% of you. The other 90% is a mystery I would happily lose sleep trying to figure out.",
-    x: "And the wild part? This is maybe 10% of you. There's a whole 90% you keep just out of reach — and the things I'd give to unwrap the rest of you, slowly, one layer at a time.",
+    title: 'And this is only 3.14% of you',
+    g: "And after all of that — this is maybe 3.14% of you. The other 96.86% is a beautiful mystery I'd love to keep reading.",
+    pg: "Here's the catch: this is barely 3.14% of you. The other 96.86% is a mystery I would happily lose sleep trying to figure out.",
+    x: "And the wild part? This is maybe 3.14% of you. There's a whole 96.86% you keep just out of reach — and the things I'd give to unwrap the rest of you, slowly, one layer at a time.",
   },
   {
     emoji: '😏',

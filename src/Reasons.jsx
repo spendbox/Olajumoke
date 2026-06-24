@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
-import { reasons, toneMeta, TONE_ORDER } from './content.js'
+import { reasons, toneMeta } from './content.js'
 
 // Shuffle the nine traits (indices 0..8); keep the "10%" and fiancé beats last.
 function buildOrder() {
@@ -77,10 +77,9 @@ const variants = {
   exit: (dir) => ({ opacity: 0, x: dir > 0 ? -90 : 90, scale: 0.96, filter: 'blur(6px)' }),
 }
 
-export default function Reasons({ tone: initialTone, onRestart }) {
+export default function Reasons({ tone, onRestart }) {
   const order = useMemo(buildOrder, [])
   const [[i, dir], setStep] = useState([0, 1])
-  const [tone, setTone] = useState(initialTone)
   const total = order.length
   const done = i >= total
   const meta = toneMeta[tone]
@@ -100,14 +99,6 @@ export default function Reasons({ tone: initialTone, onRestart }) {
   const onDragEnd = (_e, info) => {
     if (info.offset.x < -60 || info.velocity.x < -400) go(1)
     else if (info.offset.x > 60 || info.velocity.x > 400) go(-1)
-  }
-
-  const onSlider = (e) => {
-    const next = TONE_ORDER[Number(e.target.value)]
-    if (next !== tone) {
-      setTone(next)
-      buzz(8)
-    }
   }
 
   return (
@@ -156,18 +147,7 @@ export default function Reasons({ tone: initialTone, onRestart }) {
             >
               <GlowEmoji>{r.emoji}</GlowEmoji>
               <h2 className="reason-title">{r.title}</h2>
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={tone}
-                  className="reason-body"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.28 }}
-                >
-                  {r[tone]}
-                </motion.p>
-              </AnimatePresence>
+              <p className="reason-body">{r[tone]}</p>
             </motion.div>
           ) : (
             <motion.div
@@ -181,7 +161,7 @@ export default function Reasons({ tone: initialTone, onRestart }) {
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             >
               <GlowEmoji spin={false}>💌</GlowEmoji>
-              <h2 className="reason-title">that&apos;s the 10%.</h2>
+              <h2 className="reason-title">that&apos;s the 3.14%.</h2>
               <p className="reason-body">
                 The rest of you is even better. Glad you exist, Olajumoke. ✨
               </p>
@@ -189,27 +169,6 @@ export default function Reasons({ tone: initialTone, onRestart }) {
           )}
         </AnimatePresence>
       </div>
-
-      {!done && (
-        <div className="spice">
-          <div className="spice-labels">
-            <span className={tone === 'g' ? 'on' : ''}>G</span>
-            <span className={tone === 'pg' ? 'on' : ''}>PG-13</span>
-            <span className={tone === 'x' ? 'on' : ''}>18+</span>
-          </div>
-          <input
-            className={`spice-range spice-${tone}`}
-            type="range"
-            min="0"
-            max="2"
-            step="1"
-            value={TONE_ORDER.indexOf(tone)}
-            onChange={onSlider}
-            aria-label="spice level"
-          />
-          <div className="spice-hint">slide to change the spice 🌶️ · swipe the card to flip</div>
-        </div>
-      )}
 
       <div className="reasons-nav">
         <button

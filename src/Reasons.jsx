@@ -3,14 +3,16 @@ import { AnimatePresence, motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import { reasons, toneMeta } from './content.js'
 
-// Shuffle the nine traits (indices 0..8); keep the "10%" and fiancé beats last.
+// Shuffle every trait, but keep the last two beats (the "3.14%" closer and
+// the fiancé tease) in order at the end.
 function buildOrder() {
-  const traits = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  const n = reasons.length
+  const traits = Array.from({ length: n - 2 }, (_, i) => i)
   for (let i = traits.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
     ;[traits[i], traits[j]] = [traits[j], traits[i]]
   }
-  return [...traits, 9, 10]
+  return [...traits, n - 2, n - 1]
 }
 
 function buzz(ms = 12) {

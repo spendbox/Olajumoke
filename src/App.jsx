@@ -4,6 +4,9 @@ import confetti from 'canvas-confetti'
 import Aurora from './Aurora.jsx'
 import Button from './Button.jsx'
 import Reasons from './Reasons.jsx'
+import FloatingHearts from './FloatingHearts.jsx'
+import MusicToggle from './MusicToggle.jsx'
+import ScratchReveal from './ScratchReveal.jsx'
 
 const FULL_NAME = ['Aromashodu', 'Olajumoke', 'Faderera']
 
@@ -27,7 +30,6 @@ function burst() {
 function Intro({ next }) {
   return (
     <motion.div className="panel" {...fade}>
-      <div className="eyebrow">a tiny secret</div>
       <p className="lead">
         This is probably the most random, nerdy gift you would ever get…
         <br />
@@ -123,7 +125,6 @@ const RATINGS = [
 function Choose({ onPick }) {
   return (
     <motion.div className="panel" {...fade}>
-      <div className="eyebrow">the real reason i built this</div>
       <p className="lead">
         I wanted to tell you how amazing you are… but words couldn&apos;t do it.
         So I did the next best thing — I built you an app.
@@ -166,17 +167,18 @@ export default function App() {
 
   const pick = (t) => {
     setTone(t)
-    setSlide(4)
+    setSlide(5)
   }
   const restart = () => {
     setTone(null)
-    setSlide(3)
+    setSlide(4)
   }
 
   const slides = [
     <Intro key="intro" next={next} />,
     <PromiseAgain key="promise" next={next} />,
     <NameReveal key="name" next={next} />,
+    <ScratchReveal key="scratch" next={next} />,
     <Choose key="choose" onPick={pick} />,
     <Reasons key="reasons" tone={tone} onRestart={restart} />,
   ]
@@ -184,6 +186,8 @@ export default function App() {
   return (
     <>
       <Aurora />
+      <FloatingHearts />
+      <MusicToggle />
       <div className="stage">
         <AnimatePresence mode="wait">{slides[slide]}</AnimatePresence>
       </div>

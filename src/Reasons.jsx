@@ -79,7 +79,7 @@ const variants = {
   exit: (dir) => ({ opacity: 0, x: dir > 0 ? -90 : 90, scale: 0.96, filter: 'blur(6px)' }),
 }
 
-export default function Reasons({ tone, onRestart }) {
+export default function Reasons({ tone, onRestart, onFinish }) {
   const order = useMemo(buildOrder, [])
   const [[i, dir], setStep] = useState([0, 1])
   const total = order.length
@@ -173,17 +173,17 @@ export default function Reasons({ tone, onRestart }) {
       <div className="reasons-nav">
         <button
           className="nav-btn nav-ghost"
-          onClick={() => (i === 0 ? onRestart() : go(-1))}
+          onClick={() => (done || i === 0 ? onRestart() : go(-1))}
         >
-          {i === 0 ? '↺ start' : '← back'}
+          {done || i === 0 ? '↺ replay' : '← back'}
         </button>
         {!done ? (
           <button className="nav-btn nav-primary" onClick={() => go(1)}>
             {i === total - 1 ? 'finish ♥' : 'next →'}
           </button>
         ) : (
-          <button className="nav-btn nav-primary" onClick={onRestart}>
-            replay ↺
+          <button className="nav-btn nav-primary" onClick={onFinish}>
+            one more thing →
           </button>
         )}
       </div>

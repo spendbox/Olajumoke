@@ -79,7 +79,7 @@ const variants = {
   exit: (dir) => ({ opacity: 0, x: dir > 0 ? -90 : 90, scale: 0.96, filter: 'blur(6px)' }),
 }
 
-export default function Reasons({ tone, onRestart }) {
+export default function Reasons({ tone, onRestart, onFinish }) {
   const order = useMemo(buildOrder, [])
   const [[i, dir], setStep] = useState([0, 1])
   const total = order.length
@@ -165,22 +165,6 @@ export default function Reasons({ tone, onRestart }) {
               <GlowEmoji spin={false}>💌</GlowEmoji>
               <h2 className="reason-title">that&apos;s the 3.14%.</h2>
               <p className="reason-body">I am sure the rest of you is even better ❤️</p>
-              <motion.p
-                className="end-quote"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.6 }}
-              >
-                &ldquo;dyes may turn clothes dark, but you light up everywhere you go.&rdquo;
-              </motion.p>
-              <motion.p
-                className="end-cheesy"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.6, duration: 0.6 }}
-              >
-                ……that was terribly cheesy 😂
-              </motion.p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -189,17 +173,17 @@ export default function Reasons({ tone, onRestart }) {
       <div className="reasons-nav">
         <button
           className="nav-btn nav-ghost"
-          onClick={() => (i === 0 ? onRestart() : go(-1))}
+          onClick={() => (done || i === 0 ? onRestart() : go(-1))}
         >
-          {i === 0 ? '↺ start' : '← back'}
+          {done || i === 0 ? '↺ replay' : '← back'}
         </button>
         {!done ? (
           <button className="nav-btn nav-primary" onClick={() => go(1)}>
             {i === total - 1 ? 'finish ♥' : 'next →'}
           </button>
         ) : (
-          <button className="nav-btn nav-primary" onClick={onRestart}>
-            replay ↺
+          <button className="nav-btn nav-primary" onClick={onFinish}>
+            one more thing →
           </button>
         )}
       </div>

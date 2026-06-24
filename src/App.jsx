@@ -7,6 +7,7 @@ import Reasons from './Reasons.jsx'
 import FloatingHearts from './FloatingHearts.jsx'
 import MusicToggle from './MusicToggle.jsx'
 import ScratchReveal from './ScratchReveal.jsx'
+import EndQuote from './EndQuote.jsx'
 
 const FULL_NAME = ['Aromashodu', 'Olajumoke', 'Faderera']
 
@@ -173,6 +174,10 @@ export default function App() {
     setTone(null)
     setSlide(4)
   }
+  const replayAll = () => {
+    setTone(null)
+    setSlide(0)
+  }
 
   const slides = [
     <Intro key="intro" next={next} />,
@@ -180,7 +185,8 @@ export default function App() {
     <NameReveal key="name" next={next} />,
     <ScratchReveal key="scratch" next={next} />,
     <Choose key="choose" onPick={pick} />,
-    <Reasons key="reasons" tone={tone} onRestart={restart} />,
+    <Reasons key="reasons" tone={tone} onRestart={restart} onFinish={() => setSlide(6)} />,
+    <EndQuote key="endquote" onRestart={replayAll} />,
   ]
 
   return (

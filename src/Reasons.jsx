@@ -165,6 +165,22 @@ export default function Reasons({ tone, onRestart }) {
               <GlowEmoji spin={false}>💌</GlowEmoji>
               <h2 className="reason-title">that&apos;s the 3.14%.</h2>
               <p className="reason-body">I am sure the rest of you is even better ❤️</p>
+              <motion.p
+                className="end-quote"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.6 }}
+              >
+                &ldquo;dyes may turn clothes dark, but you light up everywhere you go.&rdquo;
+              </motion.p>
+              <motion.p
+                className="end-cheesy"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 2.6, duration: 0.6 }}
+              >
+                ……that was terribly cheesy 😂
+              </motion.p>
             </motion.div>
           )}
         </AnimatePresence>

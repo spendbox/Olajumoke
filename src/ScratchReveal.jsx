@@ -12,8 +12,10 @@ function buzz(ms = 12) {
 export default function ScratchReveal({ next }) {
   const wrapRef = useRef(null)
   const canvasRef = useRef(null)
+  const ctxRef = useRef(null)
   const drawing = useRef(false)
   const finished = useRef(false)
+  const lastSample = useRef(0)
   const [revealed, setRevealed] = useState(false)
   const [imgOk, setImgOk] = useState(true)
   const [pct, setPct] = useState(0)
@@ -27,7 +29,11 @@ export default function ScratchReveal({ next }) {
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
     canvas.width = Math.round(rect.width * dpr)
     canvas.height = Math.round(rect.height * dpr)
-    const ctx = canvas.getContext('2d')
+    // willReadFrequently keeps the canvas CPU-backed so the repeated
+    // getImageData() readbacks below stay cheap (otherwise mobile browsers
+    // thrash memory and can blank the renderer to black mid-scratch).
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
+    ctxRef.current = ctx
     ctx.scale(dpr, dpr)
     const g = ctx.createLinearGradient(0, 0, rect.width, rect.height)
     g.addColorStop(0, '#3a1d5e')
@@ -53,7 +59,8 @@ export default function ScratchReveal({ next }) {
 
   const scratchedPct = () => {
     const c = canvasRef.current
-    const ctx = c.getContext('2d')
+    const ctx = ctxRef.current
+    if (!c || !ctx) return 0
     const data = ctx.getImageData(0, 0, c.width, c.height).data
     let cleared = 0
     let total = 0
@@ -90,12 +97,18 @@ export default function ScratchReveal({ next }) {
     if (!drawing.current || finished.current) return
     e.preventDefault()
     const c = canvasRef.current
-    const ctx = c.getContext('2d')
+    const ctx = ctxRef.current
+    if (!c || !ctx) return
     const { x, y } = posOf(e)
     ctx.globalCompositeOperation = 'destination-out'
     ctx.beginPath()
     ctx.arc(x, y, Math.max(22, c.clientWidth * 0.09), 0, Math.PI * 2)
     ctx.fill()
+    // Sampling the whole canvas is expensive, so throttle it instead of
+    // running on every pointer move (touchmove fires very rapidly).
+    const now = performance.now()
+    if (now - lastSample.current < 100) return
+    lastSample.current = now
     const cleared = scratchedPct()
     setPct(Math.min(100, Math.round((cleared / 0.55) * 100)))
     if (cleared > 0.55) finish()
@@ -108,6 +121,12 @@ export default function ScratchReveal({ next }) {
   }
   const end = () => {
     drawing.current = false
+    // Final check on lift-off in case the threshold was crossed between
+    // throttled samples while the finger was moving.
+    if (finished.current || !ctxRef.current) return
+    const cleared = scratchedPct()
+    setPct(Math.min(100, Math.round((cleared / 0.55) * 100)))
+    if (cleared > 0.55) finish()
   }
 
   return (

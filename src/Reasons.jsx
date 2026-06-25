@@ -79,7 +79,11 @@ const variants = {
   exit: (dir) => ({ opacity: 0, x: dir > 0 ? -90 : 90, scale: 0.96, filter: 'blur(6px)' }),
 }
 
-export default function Reasons({ tone, onRestart, onFinish }) {
+export default function Reasons({ tone: rawTone, onRestart, onFinish }) {
+  // Guard against ever rendering without a valid tone (e.g. an unexpected
+  // navigation): a missing tone would otherwise make toneMeta[tone] undefined
+  // and crash the whole app to a blank screen.
+  const tone = toneMeta[rawTone] ? rawTone : 'g'
   const order = useMemo(buildOrder, [])
   const [[i, dir], setStep] = useState([0, 1])
   const total = order.length

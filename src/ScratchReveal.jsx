@@ -16,9 +16,22 @@ export default function ScratchReveal({ next }) {
   const drawing = useRef(false)
   const finished = useRef(false)
   const lastSample = useRef(0)
+  const advanced = useRef(false)
+  const timer = useRef(null)
   const [revealed, setRevealed] = useState(false)
   const [imgOk, setImgOk] = useState(true)
   const [pct, setPct] = useState(0)
+
+  // Advance to the next slide exactly once. The reveal both auto-advances on a
+  // timer AND shows a "continue" button; without this guard a manual tap plus
+  // the timer would fire next() twice, skipping the rating screen and landing
+  // on Reasons with no tone selected — which crashes and blanks the app.
+  const goNext = () => {
+    if (advanced.current) return
+    advanced.current = true
+    if (timer.current) clearTimeout(timer.current)
+    next && next()
+  }
 
   // paint the scratch coating
   useEffect(() => {
@@ -48,6 +61,9 @@ export default function ScratchReveal({ next }) {
     ctx.fillText('scratch me', rect.width / 2, rect.height / 2 - rect.width * 0.05)
     ctx.font = `${Math.round(rect.width * 0.1)}px system-ui, sans-serif`
     ctx.fillText('✨👆✨', rect.width / 2, rect.height / 2 + rect.width * 0.1)
+    return () => {
+      if (timer.current) clearTimeout(timer.current)
+    }
   }, [])
 
   const posOf = (e) => {
@@ -90,7 +106,7 @@ export default function ScratchReveal({ next }) {
       c.style.opacity = '0'
     }
     // auto-advance after the wink lands
-    setTimeout(() => next && next(), 3200)
+    timer.current = setTimeout(goNext, 3200)
   }
 
   const scratch = (e) => {
@@ -209,7 +225,7 @@ export default function ScratchReveal({ next }) {
       </AnimatePresence>
 
       {(!imgOk || revealed) && (
-        <button className="btn btn-ghost" onClick={() => next && next()}>
+        <button className="btn btn-ghost" onClick={goNext}>
           continue →
         </button>
       )}
